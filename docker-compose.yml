@@ -1,0 +1,26 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: phpfintech
+      MYSQL_DATABASE: finance-module-poc
+      MYSQL_USER: finance
+      MYSQL_PASSWORD: phpfintech
+  app:
+    image: finance-module-poc
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+    links:
+      - mysql
+    environment:
+      DB_HOST: mysql
+      DB_DATABASE: finance-module-poc
+      DB_USERNAME: finance
+      DB_PASSWORD: phpfintech
+    ports:
+      - 8080:80
+    volumes:
+      - .:/opt/finance-module-poc
+

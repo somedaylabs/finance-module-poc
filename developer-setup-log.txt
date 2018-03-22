@@ -1,0 +1,6 @@
+# composer create-project --prefer-dist laravel/lumen finance-module-poc
+# composer require roave/security-advisories:dev-master
+edit composer.json
+create .docker/apache-000-default.conf, .docker/Dockerfile, docker-compose.yml
+replace README.md
+
