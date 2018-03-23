@@ -3,10 +3,10 @@ services:
   mysql:
     image: mysql:5.7
     environment:
-      MYSQL_ROOT_PASSWORD: phpfintech
-      MYSQL_DATABASE: finance-module-poc
-      MYSQL_USER: finance
-      MYSQL_PASSWORD: phpfintech
+      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_DATABASE: "${DB_DATABASE}"
+      MYSQL_USER: "${DB_USERNAME}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
   app:
     image: finance-module-poc
     build:
@@ -16,11 +16,10 @@ services:
       - mysql
     environment:
       DB_HOST: mysql
-      DB_DATABASE: finance-module-poc
-      DB_USERNAME: finance
-      DB_PASSWORD: phpfintech
+      DB_DATABASE: "${DB_DATABASE}"
+      DB_USERNAME: "${DB_USERNAME}"
+      DB_PASSWORD: "${DB_PASSWORD}"
     ports:
       - 8080:80
     volumes:
       - .:/opt/finance-module-poc
-
