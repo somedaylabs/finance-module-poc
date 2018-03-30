@@ -6,7 +6,7 @@ use App\Exceptions\FreshbooksServiceException;
 
 class Authentication
 {
-    private const BEARER_TOKEN_FILE = "./storage/app/freshbooks-token.secret";
+    private const BEARER_TOKEN_FILE = "freshbooks-token.secret";
     private const BEARER_TOKEN_LIFE = 8 * 3600; //8 hours
 
     private $client;
@@ -32,7 +32,7 @@ class Authentication
      */
     public function getBearerToken(): string
     {
-        if (!file_exists(self::BEARER_TOKEN_FILE)) {
+        if (!file_exists(self::getStoredTokenFile())) {
             throw new FreshbooksServiceException("Bearer credentials not found; run `artisan freshbooks:bearer-token`");
         }
         $tokens = self::getStoredTokenData();
@@ -103,15 +103,20 @@ class Authentication
             $bearer = $output["access_token"];
             $refresh = $output["refresh_token"];
             $timestamp = $output["created_at"];
-            file_put_contents(self::BEARER_TOKEN_FILE, "{$bearer}|{$refresh}|{$timestamp}\n");
+            file_put_contents(self::getStoredTokenFile(), "{$bearer}|{$refresh}|{$timestamp}\n");
         } else {
             $as_string = json_encode($output);
             throw new FreshbooksServiceException("Invalid response: {$as_string}");
         }
     }
 
+    private static function getStoredTokenFile()
+    {
+        return storage_path("app") . DIRECTORY_SEPARATOR . self::BEARER_TOKEN_FILE;
+    }
+
     private static function getStoredTokenData()
     {
-        return explode("|", trim(file_get_contents(self::BEARER_TOKEN_FILE)));
+        return explode("|", trim(file_get_contents(self::getStoredTokenFile())));
     }
 }
