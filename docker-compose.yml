@@ -7,6 +7,10 @@ services:
       MYSQL_DATABASE: "${DB_DATABASE}"
       MYSQL_USER: "${DB_USERNAME}"
       MYSQL_PASSWORD: "${DB_PASSWORD}"
+  redis:
+    image: redis:3.2
+    ports:
+      - 16379:6379
   app:
     image: finance-module-poc
     build:
@@ -14,11 +18,14 @@ services:
       dockerfile: .docker/Dockerfile
     links:
       - mysql
+      - redis
     environment:
       DB_HOST: mysql
       DB_DATABASE: "${DB_DATABASE}"
       DB_USERNAME: "${DB_USERNAME}"
       DB_PASSWORD: "${DB_PASSWORD}"
+      REDIS_HOST: redis
+      CACHE_DRIVER: redis
     ports:
       - 8080:80
     volumes:
