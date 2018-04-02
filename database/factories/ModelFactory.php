@@ -17,3 +17,18 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'email' => $faker->email,
     ];
 });
+$factory->define(App\Customer::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->company,
+        'email' => $faker->companyEmail
+    ];
+});
+$factory->define(App\Billing::class, function (Faker\Generator $faker) {
+    $total = $faker->numberBetween(100, 700000);
+    return [
+        "customer_id" => factory(App\Customer::class)->create(),
+        "status" => "new",
+        "billing_date" => $faker->dateTimeThisMonth,
+        "total" => $total
+    ];
+});

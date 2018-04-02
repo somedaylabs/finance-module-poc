@@ -16,7 +16,7 @@ class CustomerController extends Controller
         $this->accounting_customer_service = $customer_service;
     }
 
-    public function show($id): ?Customer
+    public function show($id): Customer
     {
         return Customer::findOrFail($id);
     }
@@ -40,21 +40,8 @@ class CustomerController extends Controller
         ]);
         app("db")->transaction(function () use ($request, &$c) {
             $c = Customer::create($request->all());
-            $this->initializeInvoicing($c);
+            $this->accounting_customer_service->createCustomer($c->email, $c->name);
         });
         return $c;
-    }
-
-    /**
-     * @param Customer $c
-     * @throws \App\Exceptions\FreshbooksServiceException
-     */
-    private function initializeInvoicing(Customer $c): void
-    {
-        try {
-            $this->accounting_customer_service->createCustomer($c->email, $c->name);
-        } catch (\InvalidArgumentException $e) {
-            abort(422, $e->getMessage());
-        }
     }
 }

@@ -31,7 +31,7 @@ class InvoiceService
                 "name" => $item,
                 "qty" => 1,
                 "unit_cost" => [
-                    "amount" => $value,
+                    "amount" => number_format($value / 100, 2, ".", ""),
                     "code" => "USD"
                 ]
             ];

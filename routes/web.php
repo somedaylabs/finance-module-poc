@@ -18,3 +18,7 @@ $router->get('/', function () use ($router) {
 $router->get('customers', 'CustomerController@index');
 $router->get('customers/{id}', 'CustomerController@show');
 $router->post('customers', 'CustomerController@create');
+$router->get('customers/{id}/billings', 'BillingController@indexByCustomer');
+$router->post('customers/{id}/billings', 'BillingController@create');
+
+$router->get('billings/{id}', 'BillingController@show');
