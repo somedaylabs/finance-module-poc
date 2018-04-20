@@ -1,0 +1,17 @@
+[
+  {
+    "name": "mysql",
+    "listen": "0.0.0.0:23306",
+    "upstream": "mysql:3306"
+  },
+  {
+    "name": "redis",
+    "listen": "0.0.0.0:26379",
+    "upstream": "redis:6379"
+  },
+  {
+    "name": "freshbooks",
+    "listen": "0.0.0.0:28000",
+    "upstream": "api.freshbooks.com:443"
+  }
+]

@@ -10,23 +10,29 @@ services:
   redis:
     image: redis:3.2
     ports:
-      - 16379:6379
+      - "16379:6379"
   app:
     image: finance-module-poc
     build:
       context: .
       dockerfile: .docker/Dockerfile
-    links:
-      - mysql
-      - redis
     environment:
-      DB_HOST: mysql
+      DB_HOST: proxy
+      DB_PORT: 23306
       DB_DATABASE: "${DB_DATABASE}"
       DB_USERNAME: "${DB_USERNAME}"
       DB_PASSWORD: "${DB_PASSWORD}"
-      REDIS_HOST: redis
+      REDIS_HOST: proxy
+      REDIS_PORT: 26379
       CACHE_DRIVER: redis
     ports:
-      - 8080:80
+      - "8080:80"
     volumes:
       - .:/opt/finance-module-poc
+  proxy:
+    image: shopify/toxiproxy
+    volumes:
+      - ./.docker:/etc/finance-module-poc
+    command: ["-config=/etc/finance-module-poc/toxiproxy.json", "-host=0.0.0.0"]
+    ports:
+      - "18474:8474"
