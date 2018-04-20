@@ -65,7 +65,9 @@ class ApiClient
 
         $opts = [
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => $headers
+            CURLOPT_HTTPHEADER => $headers,
+            CURLOPT_CONNECT_TO => ["api.freshbooks.com:443:proxy:28000"],
+            CURLOPT_SSL_VERIFYHOST => 0
         ];
         if ($method === "POST") {
             $opts[CURLOPT_URL] = $url;
